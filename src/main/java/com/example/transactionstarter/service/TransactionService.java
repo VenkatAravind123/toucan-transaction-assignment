@@ -9,4 +9,5 @@ public interface TransactionService {
     Transaction createTransaction(Transaction transaction);
     Customer createCustomer(Customer customer);
     List<Transaction> findByCustomerId(String customerId);
+    Transaction getTransaction(String transactiondId);
 }

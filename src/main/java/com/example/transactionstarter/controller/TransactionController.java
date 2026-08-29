@@ -29,8 +29,13 @@ public class TransactionController {
     public Customer createCustomer(@RequestBody Customer customer){
         return transactionService.createCustomer(customer);
     }
-    @GetMapping("/gettransactionbyid")
+    @GetMapping("/gettransactionbycid")
     public List<Transaction> getTransactionsByCustomerId(@RequestParam String customerId){
         return transactionService.findByCustomerId(customerId);
+    }
+
+    @GetMapping("/gettransactionbytid/{transactionId}")
+    public Transaction getTransactionByTransactionId(@PathVariable String transactionId){
+        return transactionService.getTransaction(transactionId);
     }
 }

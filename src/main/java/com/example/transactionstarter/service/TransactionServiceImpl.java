@@ -30,4 +30,9 @@ public class TransactionServiceImpl  implements TransactionService{
     public List<Transaction> findByCustomerId(String customerId) {
         return transactionRepository.findByCustomerCustomerId(customerId);
     }
+
+    @Override
+    public Transaction getTransaction(String transactionId) {
+        return transactionRepository.findTransactionByTransactionId(transactionId);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.transactionstarter.service;
 
+import com.example.transactionstarter.exception.TransactionNotFoundException;
 import com.example.transactionstarter.model.Customer;
 import com.example.transactionstarter.model.Transaction;
 import com.example.transactionstarter.model.TransactionStatus;
@@ -36,7 +37,7 @@ public class TransactionServiceImpl  implements TransactionService{
     @Override
     public Transaction getTransaction(String transactionId) {
         return transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new RuntimeException("Transaction not Found" + transactionId));
+                .orElseThrow(() -> new TransactionNotFoundException("Transaction Not Found" + transactionId));
     }
 
     @Override

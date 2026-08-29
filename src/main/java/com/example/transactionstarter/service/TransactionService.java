@@ -2,6 +2,7 @@ package com.example.transactionstarter.service;
 
 import com.example.transactionstarter.model.Customer;
 import com.example.transactionstarter.model.Transaction;
+import com.example.transactionstarter.model.TransactionStatus;
 
 import java.util.List;
 
@@ -10,4 +11,5 @@ public interface TransactionService {
     Customer createCustomer(Customer customer);
     List<Transaction> findByCustomerId(String customerId);
     Transaction getTransaction(String transactiondId);
+    Transaction updateTransactionStatus(String transactiondId, TransactionStatus transactionStatus);
 }

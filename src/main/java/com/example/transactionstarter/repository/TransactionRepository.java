@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction,String> {
     List<Transaction> findByCustomerCustomerId(String customerId);
-    Transaction findTransactionByTransactionId(String transactionId);
 }

@@ -2,6 +2,7 @@ package com.example.transactionstarter.controller;
 
 import com.example.transactionstarter.model.Customer;
 import com.example.transactionstarter.model.Transaction;
+import com.example.transactionstarter.model.TransactionStatus;
 import com.example.transactionstarter.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +38,9 @@ public class TransactionController {
     @GetMapping("/gettransactionbytid/{transactionId}")
     public Transaction getTransactionByTransactionId(@PathVariable String transactionId){
         return transactionService.getTransaction(transactionId);
+    }
+    @PutMapping("/updatetransactionstatus")
+    public Transaction updateTransactionStatus(@RequestParam String transactionId,@RequestParam TransactionStatus transactionStatus){
+        return transactionService.updateTransactionStatus(transactionId,transactionStatus);
     }
 }

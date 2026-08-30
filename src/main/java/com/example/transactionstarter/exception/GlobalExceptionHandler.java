@@ -1,5 +1,6 @@
 package com.example.transactionstarter.exception;
 
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,17 @@ public class GlobalExceptionHandler {
                         "error","Conflict",
                         "message",ex.getMessage()
 
+                ));
+    }
+
+    @ExceptionHandler(ValidateException.class)
+    public ResponseEntity<?> handleValidationException(ValidateException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "timestamp",LocalDateTime.now(),
+                        "status",400,
+                        "error","Bad Request",
+                        "message",ex.getMessage()
                 ));
     }
 

@@ -2,6 +2,7 @@ package com.example.transactionstarter.service;
 
 import com.example.transactionstarter.exception.DuplicateTransactionException;
 import com.example.transactionstarter.exception.TransactionNotFoundException;
+import com.example.transactionstarter.exception.ValidateException;
 import com.example.transactionstarter.model.Customer;
 import com.example.transactionstarter.model.Transaction;
 import com.example.transactionstarter.model.TransactionStatus;
@@ -51,7 +52,7 @@ public class TransactionServiceImpl  implements TransactionService{
     public Transaction updateTransactionStatus(String transactionId, TransactionStatus transactionStatus) {
         Transaction transaction = getTransaction(transactionId);
         if(transaction.getTransactionStatus() != TransactionStatus.PENDING){
-            throw new RuntimeException("Transaction status cannot be changed from "+transaction.getTransactionStatus());
+            throw new ValidateException("Transaction status cannot be changed from "+transaction.getTransactionStatus());
         }
         transaction.setTransactionStatus(transactionStatus);
         return transactionRepository.save(transaction);

@@ -1,5 +1,6 @@
 package com.example.transactionstarter.service;
 
+import com.example.transactionstarter.exception.DuplicateTransactionException;
 import com.example.transactionstarter.exception.TransactionNotFoundException;
 import com.example.transactionstarter.model.Customer;
 import com.example.transactionstarter.model.Transaction;
@@ -21,7 +22,13 @@ public class TransactionServiceImpl  implements TransactionService{
 
     @Override
     public Transaction createTransaction(Transaction transaction) {
-        return transactionRepository.save(transaction);
+        Optional<Transaction> t = transactionRepository.findById(transaction.getTransactionId());
+        if(t.isPresent()){
+            throw new DuplicateTransactionException("Transaction already exists with ID:" + transaction.getTransactionId());
+        }
+        else{
+            return transactionRepository.save(transaction);
+        }
     }
 
     @Override

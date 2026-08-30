@@ -23,4 +23,16 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    @ExceptionHandler(DuplicateTransactionException.class)
+    public ResponseEntity<?> handleDuplicateTransaction(DuplicateTransactionException ex){
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of(
+                        "timestamp",LocalDateTime.now(),
+                        "status",409,
+                        "error","Conflict",
+                        "message",ex.getMessage()
+
+                ));
+    }
+
 }

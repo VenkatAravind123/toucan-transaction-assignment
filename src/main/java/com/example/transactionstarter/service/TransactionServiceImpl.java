@@ -25,7 +25,7 @@ public class TransactionServiceImpl  implements TransactionService{
     public Transaction createTransaction(Transaction transaction) {
         Optional<Transaction> t = transactionRepository.findById(transaction.getTransactionId());
         if(t.isPresent()){
-            throw new DuplicateTransactionException("Transaction already exists with ID:" + transaction.getTransactionId());
+            throw new DuplicateTransactionException("Transaction Rejected. Reason : Transaction already exists with ID:" + transaction.getTransactionId());
         }
         else{
             return transactionRepository.save(transaction);

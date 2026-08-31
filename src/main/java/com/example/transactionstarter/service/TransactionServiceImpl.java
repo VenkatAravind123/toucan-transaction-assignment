@@ -11,6 +11,7 @@ import com.example.transactionstarter.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,11 +24,33 @@ public class TransactionServiceImpl  implements TransactionService{
 
     @Override
     public Transaction createTransaction(Transaction transaction) {
+
         Optional<Transaction> t = transactionRepository.findById(transaction.getTransactionId());
         if(t.isPresent()){
             throw new DuplicateTransactionException("Transaction Rejected. Reason : Transaction already exists with ID:" + transaction.getTransactionId());
         }
         else{
+            if(transaction.getTransactionId() == null || transaction.getTransactionId().isBlank()){
+                throw new ValidateException("Transaction ID is required");
+            }
+            if(transaction.getAmount() == null || transaction.getAmount().compareTo(BigDecimal.ZERO) <= 0)
+            {
+                throw new ValidateException("Amount must be greater than 0");
+            }
+            if(transaction.getCurrency() == null || transaction.getCurrency().isBlank()){
+                throw new ValidateException("Currency must be required");
+            }
+            if(transaction.getTransactionType() == null){
+                throw new ValidateException("Transaction Type is not required");
+            }
+            if(transaction.getCustomer() == null || transaction.getCustomer().getCustomerId() == null){
+                throw new ValidateException("Customer ID is required");
+            }
+            String customerId = transaction.getCustomer().getCustomerId();
+                   Customer customer =  customerRepository.findById(customerId)
+                           .orElseThrow(() ->
+                                   new ValidateException("Customer not found " + customerId));
+                   transaction.setCustomer(customer);
             return transactionRepository.save(transaction);
         }
     }

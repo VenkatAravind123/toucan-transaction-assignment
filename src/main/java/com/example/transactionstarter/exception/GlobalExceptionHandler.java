@@ -47,4 +47,15 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    public ResponseEntity<?> handleInvalidJson(HttpMessageNotReadableException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "timestamp",LocalDateTime.now(),
+                        "status",400,
+                        "error","Bad Request",
+                        "message",ex.getMessage()
+                ));
+    }
+
 }

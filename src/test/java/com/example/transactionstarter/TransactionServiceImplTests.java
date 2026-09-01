@@ -136,24 +136,9 @@ public class TransactionServiceImplTests {
         );
     }
 
-    //This test ensures that the customer is created successfully.
-    //Test 5
-    @Test
-    void createCustomer(){
-        Customer c = new Customer();
-        c.setEmail("aravind@gmail.com");
-        c.setName("Aravind");
-        c.setCustomerId("C01");
-
-
-        Customer customer = transactionService.createCustomer(c);
-        assertNotNull(customer);
-        assertEquals("C01",customer.getCustomerId());
-    }
-
     //THis test ensures that the status of the transaction is updating successfully.
     //UPDATE Transaction status from PENDING to COMPLETED.
-    //Test 6
+    //Test 5
     @Test
     void updateTransactionStatusSuccessfully(){
         Customer c = new Customer();
@@ -176,36 +161,8 @@ public class TransactionServiceImplTests {
         assertNotNull(result);
         assertEquals(TransactionStatus.COMPLETED,result.getTransactionStatus());
     }
-
-
-    //This test ensures that a Transaction status cannot be changed once it is already COMPLETED.
-    //Test 7
-    @Test
-    void cannotUpdateCompletedTransaction(){
-        Customer c = new Customer();
-        c.setEmail("aravind@gmail.com");
-        c.setName("Aravind");
-        c.setCustomerId("C01");
-        customerRepository.save(c);
-
-        Transaction transaction = new Transaction();
-        transaction.setTransactionId("TX04");
-        transaction.setCustomer(c);
-        transaction.setAmount(BigDecimal.valueOf(1000));
-        transaction.setCurrency("INR");
-        transaction.setTransactionType(TransactionType.PAYMENT);
-        transaction.setTransactionStatus(TransactionStatus.COMPLETED);
-        transactionRepository.save(transaction);
-
-
-        assertThrows(
-                ValidateException.class,
-                () -> transactionService.updateTransactionStatus("TX04",TransactionStatus.FAILED)
-        );
-    }
-
     //This test ensures that transactions of a customer are retrieved successfully by customer ID.
-    //Test 8
+    //Test 6
     @Test
     void getCustomerTransactions(){
         Customer c = new Customer();
@@ -236,6 +193,51 @@ public class TransactionServiceImplTests {
         assertEquals(2,customerTransactions.size());
 
     }
+    //This test ensures that the customer is created successfully.
+    //Test 7
+    @Test
+    void createCustomer(){
+        Customer c = new Customer();
+        c.setEmail("aravind@gmail.com");
+        c.setName("Aravind");
+        c.setCustomerId("C01");
+
+
+        Customer customer = transactionService.createCustomer(c);
+        assertNotNull(customer);
+        assertEquals("C01",customer.getCustomerId());
+    }
+
+
+
+
+    //This test ensures that a Transaction status cannot be changed once it is already COMPLETED.
+    //Test 8
+    @Test
+    void cannotUpdateCompletedTransaction(){
+        Customer c = new Customer();
+        c.setEmail("aravind@gmail.com");
+        c.setName("Aravind");
+        c.setCustomerId("C01");
+        customerRepository.save(c);
+
+        Transaction transaction = new Transaction();
+        transaction.setTransactionId("TX04");
+        transaction.setCustomer(c);
+        transaction.setAmount(BigDecimal.valueOf(1000));
+        transaction.setCurrency("INR");
+        transaction.setTransactionType(TransactionType.PAYMENT);
+        transaction.setTransactionStatus(TransactionStatus.COMPLETED);
+        transactionRepository.save(transaction);
+
+
+        assertThrows(
+                ValidateException.class,
+                () -> transactionService.updateTransactionStatus("TX04",TransactionStatus.FAILED)
+        );
+    }
+
+
 
     //This test ensures that a transaction cannot be created without a customer.
     //Test 9

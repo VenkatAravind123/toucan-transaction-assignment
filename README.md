@@ -2,6 +2,7 @@
 
 This is the starter project for the Customer Transactions exercise.
 
+
 ## Before you start
 
 The first thing you should do after cloning the repository is:
@@ -45,65 +46,221 @@ Implement these four operations:
 
 You may change the surrounding design if you believe your solution is better.
 
-## Transaction fields
+## What I Implemented in this project
 
+## Customer Fields
+Every Customer contains:
+
+- Customer ID => Primary Key (String)
+- Name (String)
+- Email (String)
+
+## Transaction fields
 Every transaction contains:
 
-- Transaction ID
-- Customer ID
-- Amount
-- Currency
-- Transaction Type
-- Transaction Status
+- Transaction ID => Primary Key (String)
+- Customer ID => Customer ID is Foreign key (String)
+- Amount (BigDecimal)
+- Currency (String)
+- Transaction Type (Enum) => "PAYMENT", "REFUND" 
+- Transaction Status (Enum) => "PENDING","COMPLETED","FAILED"
 
-### Validation rules
+### My Validation rules
 
 Define what makes a transaction valid. At minimum, consider:
 
-- Transaction ID
-- Customer ID
-- Amount
-- Currency
-- Transaction type
-- Initial status
+- Transaction ID must not be null or blank.
+- Customer ID must not be null or blank.
+- Customer ID refers to an existing customer.
+- Amount must be greater than 0.
+- Currency must not be null or blank.
+- Transaction type is required.
+- Transaction Status is required when creating a transaction.
+- A transaction status can only be updated when the current status is "PENDING".
 
 Also explain any business validation you add beyond the annotations already supplied.
 
 ## API skeleton
 
 ### Create
+`POST /createtransaction`
+Creates a new transaction after validating the input and checking that the customer exists and transaction ID is unique.
 
-`TODO`
-
-Example:
-
+Request:
 ```
-TODO
-```
+{
+  "transactionId": "TX01",
+  "customer": {
+    "customerId": "C01"
+  },
+  "amount": 1,
+  "currency": "INR",
+  "transactionType": "PAYMENT",
+  "transactionStatus": "PENDING"
+}
+
+Response:
+```{
+  "transactionId": "TX01",
+  "customer": {
+    "customerId": "C01",
+    "name": "Aravind",
+    "email": "aravind@gmail.com"
+  },
+  "amount": 1000.00,
+  "currency": "INR",
+  "transactionType": "PAYMENT",
+  "transactionStatus": "PENDING"
+}
 
 ### Get
 
-`TODO`
+`GET /gettransactionbytid/TX01`
+Used Path Variable for input
+Returns the transaction with ID 'TX01'.
+Response:
+```
+{
+"transactionId": "TX01",
+"customer": {
+"customerId": "C01",
+"name": "Venkat",
+"email": "aravind@gmail.com"
+},
+"amount": 1000.00,
+"currency": "INR",
+"transactionType": "PAYMENT",
+"transactionStatus": "PENDING"
+}
 
 ### Update status
-
-`TODO`
-
-Example:
+`PUT /updatetransactionstatus?transactionId=TX01&transactionStatus=FAILED`
+Used Request Param for inputs
+Response:
 
 ```
-TODO
-```
+{
+    "transactionId": "TX01",
+    "customer": {
+        "customerId": "C01",
+        "name": "Venkat",
+        "email": "aravind@gmail.com"
+    },
+    "amount": 1.00,
+    "currency": "INR",
+    "transactionType": "PAYMENT",
+    "transactionStatus": "FAILED"
+}
+
 
 ### Get customer transactions
 
-`TODO`
+`GET /gettransactionbycid?customerId=C01`
 
-## Testing expectations
+Response:
+```
+[
+ {
+  "transactionId": "TX01",
+  "customer": {
+  "customerId": "C01",
+  "name": "Venkat",
+  "email": "aravind@gmail.com"
+ },
+  "amount": 1.00,
+  "currency": "INR",
+  "transactionType": "PAYMENT",
+  "transactionStatus": "FAILED"
+},
+{
+  "transactionId": "TX02",
+  "customer": {
+  "customerId": "C01",
+  "name": "Venkat",
+  "email": "aravind@gmail.com"
+},
+  "amount": 1200.00,
+  "currency": "INR",
+  "transactionType": "PAYMENT",
+  "transactionStatus": "COMPLETED"
+}
+]
 
-Add at least four meaningful tests.
+### Create Customer
+`POST /createcustomer`
+Creates a new customer.
 
-Your tests should cover more than just application startup. 
+Request:
+```
+{
+    "customerId":"C01",
+    "name":"Venkat",
+    "email":"aravind@gmail.com"
+}
 
-You decide exactly which tests provide the best coverage.
+Response:
+```
+{
+"customerId": "C01",
+"name": "Venkat",
+"email": "aravind@gmail.com"
+}
 
+
+## Testing
+Automated Tests are implemented using JUnit and Spring Boot Test.
+The following scenarios are covered:
+
+1.Create a Transaction Successfully.
+2.Transaction Rejected when Invalid amount is given.
+3.Duplicate Transaction ID Rejected.
+4.Request for a Transaction that Does not Exist.
+5.Successful Transaction status update.
+6.Retrieval of all transactions for a customer.
+7.Creation of a New Customer.
+8.Cannot Update a Completed Transaction.
+9.Transaction Rejected when Customer is Not Found.
+10.Retrieve Existing Transaction Successfully.
+
+The tests use the H2 in-memory database and clear the transaction and customer 
+data before each test to keep each test independent.
+
+## Documentation
+
+### Understanding of the Problem
+This Application is a Transaction Processing Service that manages customers to process transactions.
+The Application implements main four operations: Create a Transaction , Update Transaction Status, 
+Get Transaction by ID, and Get Transactions by Customer ID.
+
+A Transaction is an entity that can be created by an existing customer.I implemented the relation between
+the Transaction and Customer using a @ManyToOne Mapping , where one customer can have many transactions.
+
+
+### Assumptions I made
+- Customer ID and Transaction ID are primary keys and are unique.
+- A transaction can only be created for an existing customer.
+- Transaction ID must be unique.
+- Amount must be greater than zero.
+- Transaction Types are PAYMENT and REFUND.
+- Transaction Status are PENDING, COMPLETED, FAILED,CANCELLED.
+- A transaction status can only be changed when its current status is PENDING.
+
+
+### Testing Approach
+
+As this application uses in-memory database I added a setup to wipe out the database before each test.
+
+### Known Limitations
+- The application has entities which are used directly as request and response models;
+There are no DTOs introduced.
+- Exception handling could be improved by introducing a another minute exceptions.
+- Validation is implemented in the service layer but we can implement Bean Validations.
+
+### Improvements With More Time
+With additional time 
+- I would introduce DTOs for better seperation between the API and database.
+- I would implement exceptions with detailed HTTP Status codes and Error messages.
+- I would implement more detailed Bean Validations for the Entity models.
+
+
+### AI Usage Disclosure

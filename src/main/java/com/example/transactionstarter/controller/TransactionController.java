@@ -21,24 +21,30 @@ public class TransactionController {
         return Map.of("message", "Starter project is running");
     }
 
+    //Create a Transaction
     @PostMapping("/createtransaction")
     public Transaction createTransaction(@RequestBody Transaction transaction){
         return transactionService.createTransaction(transaction);
     }
 
+    //Create a Customer added method
     @PostMapping("/createcustomer")
     public Customer createCustomer(@RequestBody Customer customer){
         return transactionService.createCustomer(customer);
     }
+    //GET transactions List by Customer ID
     @GetMapping("/gettransactionbycid")
     public List<Transaction> getTransactionsByCustomerId(@RequestParam String customerId){
         return transactionService.findByCustomerId(customerId);
     }
 
+    //GET transaction by Transaction ID
     @GetMapping("/gettransactionbytid/{transactionId}")
     public Transaction getTransactionByTransactionId(@PathVariable String transactionId){
         return transactionService.getTransaction(transactionId);
     }
+
+    //UPDATE transaction status
     @PutMapping("/updatetransactionstatus")
     public Transaction updateTransactionStatus(@RequestParam String transactionId,@RequestParam TransactionStatus transactionStatus){
         return transactionService.updateTransactionStatus(transactionId,transactionStatus);

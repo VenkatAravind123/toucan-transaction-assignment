@@ -16,12 +16,27 @@ I used ChatGPT as my AI Assistant to finalize my requirements and implementation
 
 
 ### Changes and Corrections Made
-- I did not blindly use the AI-generated plan because I thought that a transaction cannot exist without a Customer
-So I added a Customer entity and mapped them using foreign key (ManytoOne relation).
-- ChatGPT gave the implementation with DTOs but I made proper preperations to implement without DTOs as it is complex.
-- I thought that DTOs are used in a REST API context to decouple the internal representation from the client-facing API so 
-I refrained from using that.
-- I also maintained a clean codebase with Controller,Service and Repository packages.
+- I did not blindly use the AI-generated plan because I thought that a transaction should not exist without an
+  associated Customer entity and mapped them using a `ManytoOne` relation with a foreign key.
+- ChatGPT suggested using DTOs, but I decided to use entity classes directly for this excercise because the application
+  is small and I wanted to keep the implementation simple.
+- I also maintained a clean seperation between the different layers of the application with Controller,Service and Repository packages.
+- I added automated tests beyond the minimum four required tests to verify additional scenarios such as status updates, customer transactions, and
+  customer validation.
+
+
+## Verification 
+I verified the final implementation through:
+
+- Manual API testing of the implemented endpoints.
+- Automated JUnit and Spring Boot tests.
+- Testing validation and exception scenarios.
+- Testing duplicate Transaction IDs.
+- Testing transaction status updates.
+- Testing customer transaction retrieval.
+- Running the complete Maven test suite using:
+
+
 
 
 

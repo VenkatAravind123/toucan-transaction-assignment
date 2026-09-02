@@ -263,7 +263,8 @@ the Transaction and Customer using a `@ManyToOne` Mapping, where one customer ca
 - Amount must be greater than zero.
 - Transaction Types are PAYMENT and REFUND.
 - Transaction Status are PENDING, COMPLETED, FAILED.
-- A transaction status can only be changed when its current status is PENDING.
+- I allow status updates only when the current status is PENDING because COMPLETED and FAILED 
+transactions represent final states and should not be changed after processing.
 
 ### Testing Approach
 
@@ -283,3 +284,25 @@ With additional time
 - I would introduce DTOs for better seperation between the API and database.
 - I would implement exceptions with detailed HTTP Status codes and Error messages.
 - I would implement more detailed Bean Validations for the Entity models.
+
+
+### Result
+
+```bash
+./mvnw clean test
+```
+
+```text
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.027 s -- in com.example.transactionstarter.TransactionStarterApplicationTests
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  36.098 s
+[INFO] Finished at: 2026-09-02T10:48:59+05:30
+[INFO] ------------------------------------------------------------------------
+```
